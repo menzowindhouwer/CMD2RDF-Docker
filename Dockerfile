@@ -1,5 +1,8 @@
 FROM openlink/vos:v0
 
+ENV CMD2RDF_HOST http://192.168.99.100:8080
+ENV CMD2RDF_HOME /app
+
 RUN mkdir -p /opt/virtuoso-opensource/var/lib/virtuoso/db
 ADD virtuoso.ini /opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
@@ -47,13 +50,9 @@ RUN mvn clean install
 # checkout and compile cmd2rdf
 WORKDIR /app/src
 RUN git clone https://github.com/TheLanguageArchive/CMD2RDF.git
-ADD cmd2rdf.xml /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
-ADD web.xml /app/src/CMD2RDF/webapps/src/main/webapp/WEB-INF/web.xml
-ADD BrowsePage.java /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/pages/BrowsePage.java
-ADD Cmd2RdfPageHeader.html /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/Cmd2RdfPageHeader.html
-ADD HowItWorkPage.html /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/pages/HowItWorkPage.html
-ADD ApiPage.html /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/pages/ApiPage.html
-ADD cmd2rdf-lda.ttl /app/src/CMD2RDF/lda/src/main/webapp/specs/cmd2rdf-lda.ttl
+RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/webapps/src/main/webapp/WEB-INF/web.xml
+RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
+RUN sed -i "s|http://192.168.99.100:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/lda/src/main/webapp/specs/cmd2rdf-lda.ttl
 WORKDIR /app/src/CMD2RDF
 RUN mvn clean install
 # once more to create webapps/target//Cmd2RdfPageHeader.properties
