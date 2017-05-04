@@ -1,5 +1,6 @@
 FROM openlink/vos:v0
 
+ENV CMD2RDF_SRC  git
 ENV CMD2RDF_HOST http://192.168.99.100:8080
 ENV CMD2RDF_HOME /app
 
@@ -48,10 +49,14 @@ RUN git checkout tags/elda-1.3.1
 RUN mvn clean install
 
 # checkout and compile cmd2rdf
+#RUN git clone https://github.com/TheLanguageArchive/CMD2RDF.git
+ADD get-cmd2rdf.sh /app
+RUN chmod +x /app/get-cmd2rdf.sh
 WORKDIR /app/src
-RUN git clone https://github.com/TheLanguageArchive/CMD2RDF.git
+RUN  /app/get-cmd2rdf.sh
 RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/webapps/src/main/webapp/WEB-INF/web.xml
 RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
+RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
 RUN sed -i "s|http://192.168.99.100:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/lda/src/main/webapp/specs/cmd2rdf-lda.ttl
 WORKDIR /app/src/CMD2RDF
 RUN mvn clean install
