@@ -39,4 +39,4 @@ tar xj $WORK/$SET
 
 # start import
 cd $HOME
-$HOME/cmd2rdf-run.sh &> $HOME/cmd2rdf-`date '+%Y%m%d'`.log
+$HOME/cmd2rdf-run.sh &> $WORK/cmd2rdf-`date '+%Y%m%d'`.log
