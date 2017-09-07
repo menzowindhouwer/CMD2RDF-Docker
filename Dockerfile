@@ -67,8 +67,10 @@ RUN cp /app/src/CMD2RDF/webapps/target/cmd2rdf.war /var/lib/tomcat6/webapps
 RUN cp /app/src/CMD2RDF/lda/target/cmd2rdf-lda.war /var/lib/tomcat6/webapps
 
 # install the script to import CMD records
-ADD cmd2rdf.sh /app/cmd2rdf.sh
-RUN chmod 755 /app/cmd2rdf.sh
+ADD cmd2rdf-init.sh /app/cmd2rdf-init.sh
+ADD cmd2rdf-cron.sh /app/cmd2rdf-cron.sh
+ADD cmd2rdf-run.sh /app/cmd2rdf-run.sh
+RUN chmod 755 /app/*.sh
 
 EXPOSE 1111
 EXPOSE 8890
