@@ -11,7 +11,7 @@ mkdir -p $WORK
 # make sure expected dirs exist
 mkdir -p $WORK/harvester
 mkdir -p $WORK/profiles-cache
-mkdir -o $WORK/rdf-output/temp
+mkdir -p $WORK/rdf-output/temp
 cd $WORK
 if [ -f $SET ]; then
     mv $SET $SET.BAK

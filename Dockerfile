@@ -9,7 +9,7 @@ ADD virtuoso.ini /opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
 RUN apt-get -y update && \
   apt-get -y clean && \
-  apt-get -y install supervisor default-jdk maven tomcat6 && \
+  apt-get -y install supervisor default-jdk maven tomcat6 curl && \
   rm -rf /var/lib/apt/lists/* && \
   rm -rf /tmp/*
   
