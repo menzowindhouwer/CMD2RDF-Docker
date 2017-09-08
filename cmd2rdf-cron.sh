@@ -19,9 +19,9 @@ if [ -f $SET ]; then
     mv $SET $SET.BAK
 fi
 if [ -f $SET.BAK ]; then
-    curl -o $SET -z $SET.BAK "$SRC/$SET"
+    curl -s -S -o $SET -z $SET.BAK "$SRC/$SET"
 else
-    curl -o $SET "$SRC/$SET"
+    curl -s -S -o $SET "$SRC/$SET"
 fi
 
 if [ ! -f $SET ]; then
@@ -35,7 +35,7 @@ if [ -d $DATA ]; then
 fi
 mkdir -p $DATA
 cd $DATA
-tar xj $WORK/$SET
+tar xjf $WORK/$SET
 
 # start import
 cd $HOME
