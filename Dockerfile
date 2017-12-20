@@ -40,6 +40,7 @@ RUN mkdir -p /app/src && \
 # add the linked data sets showcasing enrichment    
 ADD ld/* /app/ld/
 RUN chmod 755 /app/ld/*.sh
+RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/ld/*.graph
   
 # prime the maven cache with elda
 WORKDIR /app/src
