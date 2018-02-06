@@ -1,7 +1,7 @@
 FROM openlink/vos:v0
 
 ENV CMD2RDF_SRC  git
-ENV CMD2RDF_HOST http://192.168.99.100:8080
+ENV CMD2RDF_HOST http://localhost:8080
 ENV CMD2RDF_HOME /app
 
 RUN mkdir -p /opt/virtuoso-opensource/var/lib/virtuoso/db
@@ -41,6 +41,10 @@ RUN mkdir -p /app/src && \
 ADD ld/* /app/ld/
 RUN chmod 755 /app/ld/*.sh
 RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/ld/*.graph
+
+# move VLO orgs to the harvester dir
+# NOTE: orgs isn't in the new CLAVAS
+RUN mv /app/ld/meertens-VLO-orgs.rdf /app/work/harvester/meertens-VLO-orgs.rdf
   
 # prime the maven cache with elda
 WORKDIR /app/src
@@ -62,7 +66,7 @@ RUN sed -i "s|http://192.168.99.100:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/lda/s
 RUN rm /app/get-cmd2rdf.sh
 WORKDIR /app/src/CMD2RDF
 RUN mvn clean install
-# once more to create webapps/target//Cmd2RdfPageHeader.properties
+# once more to create webapps/target/Cmd2RdfPageHeader.properties
 RUN mvn install
 # install the WARs
 RUN cp /app/src/CMD2RDF/webapps/target/cmd2rdf.war /var/lib/tomcat6/webapps
