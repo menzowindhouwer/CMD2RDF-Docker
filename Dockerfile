@@ -3,7 +3,8 @@ FROM openlink/vos:v0
 ENV CMD2RDF_SRC  git
 ENV CMD2RDF_HOST http://localhost:8080
 ENV CMD2RDF_HOME /app
-
+ENV ADMIN=admin
+ENV PWD=replaceMe
 RUN mkdir -p /opt/virtuoso-opensource/var/lib/virtuoso/db
 ADD virtuoso.ini /opt/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
@@ -61,8 +62,11 @@ WORKDIR /app/src
 RUN  /app/get-cmd2rdf.sh
 RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/webapps/src/main/webapp/WEB-INF/web.xml
 RUN sed -i "s|/app|$CMD2RDF_HOME|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
+RUN sed -i "s|Put here a strong password!|$PWD|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
 RUN sed -i "s|http://localhost:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/batch/src/main/resources/cmd2rdf.xml
 RUN sed -i "s|http://192.168.99.100:8080|$CMD2RDF_HOST|g" /app/src/CMD2RDF/lda/src/main/webapp/specs/cmd2rdf-lda.ttl
+RUN sed -i "s|ADMIN|${ADMIN}|g" /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/service/UserService.java
+RUN sed -i "s|PWD|${PWD}|g" /app/src/CMD2RDF/webapps/src/main/java/nl/knaw/dans/cmd2rdf/webapps/ui/service/UserService.java
 RUN rm /app/get-cmd2rdf.sh
 WORKDIR /app/src/CMD2RDF
 RUN mvn clean install
